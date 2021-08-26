@@ -123,6 +123,9 @@ public:
             ++eventIndex;
         }
 
+        delete [] remainingEvents;
+        delete [] tempArray;
+        
         return attend;
     }
 };
