@@ -8,7 +8,7 @@ public:
         for (int i = 0; i < size; ++i)
         {
             const int curr = nums[i];
-            auto complement = table.find(target - curr);
+            std::unordered_map<int, int>::const_iterator complement = table.find(target - curr);
             
             if (complement == table.end())
                 table[curr] = i;
