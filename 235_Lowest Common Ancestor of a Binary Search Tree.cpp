@@ -11,88 +11,34 @@
 class Solution {
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        if (root == nullptr)
+        if (p->val > q->val)
+        {
+            std::swap(p, q);
+        }
+        
+        return LCA_rec(root, p, q);
+    }
+    
+private:
+    TreeNode* LCA_rec(TreeNode* node, TreeNode* p, TreeNode* q)
+    {
+        if (node == nullptr)
         {
             return nullptr;
         }
         
-        if (root == p)
+        const int val = node->val;
+        
+        if (val < p->val)
         {
-            pFound = true;
-            
-            if (qFound == false)
-            {
-                if (lowestCommonAncestor(root->left, p, q) == q)
-                {
-                    return root;
-                }
-                
-                if (lowestCommonAncestor(root->right, p, q) == q)
-                {
-                    return root;
-                }
-            }
-            
-            return p;
+            return LCA_rec(node->right, p, q);
         }
         
-        if (root == q)
+        if (val > q->val)
         {
-            qFound = true;
-            
-            if (pFound == false)
-            {
-                if (lowestCommonAncestor(root->left, p, q) == p)
-                {
-                    return root;
-                }
-                
-                if (lowestCommonAncestor(root->right, p, q) == p)
-                {
-                    return root;
-                }
-            }
-            
-            return q;
+            return LCA_rec(node->left, p, q);
         }
         
-        TreeNode* leftResult = lowestCommonAncestor(root->left, p, q);
-        
-        if (leftResult && leftResult != p && leftResult != q)
-        {
-            return leftResult;
-        }
-        
-        if (leftResult == p)
-        {
-            if (qFound == false)
-            {
-                if (lowestCommonAncestor(root->right, p, q) == q)
-                {
-                    return root;
-                }
-            }
-            
-            return p;
-        }
-        
-        if (leftResult == q)
-        {
-            if (pFound == false)
-            {
-                if (lowestCommonAncestor(root->right, p, q) == p)
-                {
-                    return root;
-                }
-            }
-            
-            return q;
-        }
-        
-        return lowestCommonAncestor(root->right, p, q);
+        return node;
     }
-    
-private:
-    bool pFound = false;
-    bool qFound = false;
 };
