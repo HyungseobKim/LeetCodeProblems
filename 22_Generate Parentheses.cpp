@@ -1,46 +1,42 @@
 class Solution {
 public:
     vector<string> generateParenthesis(int n) {
-        generateParenthesis_rec("", 0, n);
+        std::string s = "";
+        generateParenthesis_rec(s, n, 0);
         return answer;
     }
-    
+
 private:
-    void generateParenthesis_rec(std::string base, int currentOpen, int remainOpen)
+    void generateParenthesis_rec(std::string& s, int toOpen, int toClose)
     {
-        if (currentOpen == 0)
+        if (toOpen == 0)
         {
-            if (remainOpen == 0)
+            std::string closing = "";
+
+            for (int i = 0; i < toClose; ++i)
             {
-                // No more cases.
-                return;
+                closing += ')';
             }
-            else
-            {
-                // Must open new one.
-                generateParenthesis_rec(base + "(", currentOpen + 1, remainOpen - 1);
-            }
+
+            answer.push_back(s + closing);
+            return;
         }
-        else if (remainOpen == 0)
+
+        if (toClose > 0)
         {
-            // Must close all.
-            std::string s = base;
-            
-            for (int i = 0; i < currentOpen; ++i)
-            {
-                base += ")";
-            }
-            
-            answer.push_back(base);
+            s += ')';
+
+            generateParenthesis_rec(s, toOpen, toClose - 1);
+
+            s.pop_back();
         }
-        else // currentOpen > 0 && remainOpen > 0
-        {
-            // Both choices are possible.
-            generateParenthesis_rec(base + "(", currentOpen + 1, remainOpen - 1);
-            generateParenthesis_rec(base + ")", currentOpen - 1, remainOpen);
-        }
+
+        s += '(';
+
+        generateParenthesis_rec(s, toOpen - 1, toClose + 1);
+
+        s.pop_back();
     }
-    
-private:
+
     std::vector<std::string> answer;
 };
