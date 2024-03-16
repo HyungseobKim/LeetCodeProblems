@@ -1,97 +1,83 @@
 class Solution {
 public:
     bool isPalindrome(string s) {
-        const int length = static_cast<int>(s.length());
-        
-        auto IsAlphanumeric = [](char c){            
-            if (c < '0')
-            {
-                // not alphanumeric
-                return -1;
-            }
-            
-            if (c <= '9')
-            {
-                // numeric
-                return 0;
-            }
-            
-            if (c < 'A')
-            {
-                // not alphanumeric
-                return -1;
-            }
-            
-            if (c <= 'Z')
-            {
-                // upper letter
-                return 1;
-            }
-            
-            if (c < 'a')
-            {
-                // not alphanumeric
-                return -1;
-            }
-            
-            if (c <= 'z')
-            {
-                // lower letter
-                return 2;
-            }
-            
-            // not alphanumeric
-            return -1;
-        };
-        
-        for (int begin = -1, end = length; begin + 1 < end;)
+        int i = 0;
+        int j = s.length() - 1;
+
+        while (i <= j)
         {
-            int alphanumeric;
-            
-            char c1;
-            do
+            char c1 = s[i];
+            int alphanumeric = IsAlphanumeric(c1);
+
+            while (alphanumeric == -1)
             {
-                if (begin >= end)
+                ++i;
+
+                if (i >= j)
                 {
                     return true;
                 }
-                
-                ++begin;
-                c1 = s[begin];
-                
+
+                c1 = s[i];
                 alphanumeric = IsAlphanumeric(c1);
-            } while (alphanumeric == -1);
-            
+            }
+
             if (alphanumeric == 1)
             {
-                c1 += ('a' - 'A');
+                c1 -= ('A' - 'a');
             }
-            
-            char c2;
-            do
+
+            char c2 = s[j];
+            alphanumeric = IsAlphanumeric(c2);
+
+            while (alphanumeric == -1)
             {
-                if (begin >= end)
+                --j;
+
+                if (j <= i)
                 {
                     return true;
                 }
-                
-                --end;
-                c2 = s[end];
-                
+
+                c2 = s[j];
                 alphanumeric = IsAlphanumeric(c2);
-            } while (alphanumeric == -1);
-            
+            }
+
             if (alphanumeric == 1)
             {
-                c2 += ('a' - 'A');
+                c2 -= ('A' - 'a');
             }
-            
+
             if (c1 != c2)
             {
                 return false;
             }
+
+            ++i;
+            --j;
         }
-        
+
         return true;
     }
+
+private:
+    int IsAlphanumeric (char c)
+    {            
+        if (c >= 'a' && c <= 'z')
+        {
+            return 2;
+        }
+
+        if (c >= '0' && c <= '9')
+        {
+            return 0;
+        }
+
+        if (c >= 'A' && c <= 'Z')
+        {
+            return 1;
+        }
+
+        return -1;
+    };
 };
