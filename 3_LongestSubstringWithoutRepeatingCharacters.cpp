@@ -2,37 +2,32 @@ class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
         std::unordered_map<char, int> table;
-        const int size = static_cast<int>(s.length());
-        
-        int best = 0;
+
+        int subStringBegin = 0;
         int length = 0;
-        int min = 0; // Current starting point of length.
-        
-        for (int i = 0; i < size; ++i)
+        int longest = 0;
+
+        const int end = s.length();
+
+        for (int i = 0; i < end; ++i)
         {
-            const char curr = s[i];
-            
-            auto repeat = table.find(curr);
-            
-            if (repeat == table.end() || repeat->second < min)
+            const char c = s[i];
+
+            if (table.find(c) == table.end() || table[c] < subStringBegin)
             {
                 ++length;
-                table[curr] = i;
             }
-            else // when we find repeating character
+            else
             {
-                if (length > best)
-                    best = length;
-                
-                length = i - repeat->second;
-                min = repeat->second + 1;
-                repeat->second = i;
+                longest = std::max(longest, length);
+
+                length -= (table[c] - subStringBegin);
+                subStringBegin = table[c] + 1;
             }
+
+            table[c] = i;
         }
-        
-        if (length > best)
-            return length;
-        
-        return best;
+
+        return std::max(longest, length);
     }
 };
