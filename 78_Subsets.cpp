@@ -1,35 +1,29 @@
 class Solution {
 public:
     vector<vector<int>> subsets(vector<int>& nums) {
-        answer.push_back(std::vector<int>());
-        
-        subsets_rec(nums, nums.size() - 1);
-        
+        size = nums.size();
+
+        std::vector<int> base;
+        answer.push_back(base);
+
+        subsets_rec(nums, base, 0);
         return answer;
     }
-    
+
 private:
-    void subsets_rec(const std::vector<int>& nums, int indexLast)
+    void subsets_rec(const std::vector<int>& nums, std::vector<int>& base, int begin)
     {
-        const int num = nums[indexLast];
-        
-        if (indexLast == 0)
+        for (int i = begin; i < size; ++i)
         {
-            answer.push_back(std::vector<int>(1, num));
-            return;
-        }
-        
-        subsets_rec(nums, indexLast - 1);
-        
-        const int size = answer.size();
-        
-        for (int i = 0; i < size; ++i)
-        {
-            answer.push_back(answer[i]);
-            answer.back().push_back(num);
+            base.push_back(nums[i]);
+            answer.push_back(base);
+
+            subsets_rec(nums, base, i + 1);
+
+            base.pop_back();
         }
     }
-    
-private:
+
     std::vector<std::vector<int>> answer;
+    int size;
 };
