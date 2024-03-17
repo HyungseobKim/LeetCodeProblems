@@ -1,33 +1,45 @@
 class Solution {
 public:
     vector<vector<int>> combine(int n, int k) {
-        std::vector<int> base(k);
-        combine_rec(base, 0, n, k);
+        long long int total = 1;
+        for (int i = 0; i < k; ++i)
+        {
+            total *= (n-i);
+        }
+        for (int i = 0; i < k; ++i)
+        {
+            total /= (k-i);
+        }
+        answer = std::vector<std::vector<int>>(total, std::vector<int>(k));
+        index = 0;
+
+        std::vector<int> nums(k, 0);
+        combine_rec(1, n, k, nums);
+
         return answer;
     }
-    
+
 private:
-    void combine_rec(std::vector<int>& base, int depth, int n, int k)
+    void combine_rec(int start, int n, int k, std::vector<int>& nums)
     {
         if (k == 1)
         {
-            for (int i = 1; i <= n; ++i)
+            for (int i = start; i <= n; ++i)
             {
-                base[depth] = i;
-                answer.push_back(base);
+                answer[index] = nums;
+                answer[index][0] = i;
+                ++index;
             }
-            
             return;
         }
-        
-        for (int i = n; i >= k; --i)
+
+        for (int i = start; i <= n; ++i)
         {
-            base[depth] = i;
-            
-            combine_rec(base, depth + 1, i - 1, k - 1);
+            nums[k-1] = i;
+            combine_rec(i+1, n, k-1, nums);
         }
     }
-    
-private:
+
     std::vector<std::vector<int>> answer;
+    int index;
 };
