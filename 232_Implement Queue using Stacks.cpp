@@ -8,11 +8,6 @@ public:
     }
     
     void push(int x) {
-        if (outStack.empty() == false)
-        {
-            MoveAll(outStack, inStack);
-        }
-
         inStack.push(x);
     }
     
