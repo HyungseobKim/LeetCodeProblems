@@ -1,81 +1,57 @@
-struct Node
-{
-    bool visited = false;
-    int num = 0;
-};
-
 class Solution {
-public:    
+public:
     int numIslands(vector<vector<char>>& grid) {
         height = grid.size();
         width = grid[0].size();
-        
-        nodes = std::vector<Node>(width * height);
-        
+
+        int islands = 0;
+
         for (int y = 0; y < height; ++y)
         {
             for (int x = 0; x < width; ++x)
             {
-                ProcessNode(grid, x, y);
+                if (grid[y][x] == '1')
+                {
+                    ExploreAnIsland(grid, std::make_pair(x, y));
+                    ++islands;
+                }
             }
         }
-        
+
         return islands;
     }
 
 private:
-    void ProcessNode(const std::vector<std::vector<char>>& grid, int x, int y)
+    void ExploreAnIsland(std::vector<std::vector<char>>& grid, const std::pair<int, int>& pos)
     {
-        const int index = y * width + x;
-        Node& node = nodes[index];
-        
-        if (node.visited == true)
-        {
-            return;
-        }
-        
-        node.visited = true;
-        
-        if (grid[y][x] == '0')
-        {
-            return;
-        }
-        
-        if (node.num == 0)
-        {
-            node.num = ++islands;
-        }
+        std::stack<std::pair<int, int>> lands;
+        lands.push(pos);
 
-        if (x - 1 >= 0)
+        while (lands.size())
         {
-            nodes[index - 1].num = node.num;
-            ProcessNode(grid, x - 1, y);
-        }
-        
-        if (x + 1 < width)
-        {
-            nodes[index + 1].num = node.num;
-            ProcessNode(grid, x + 1, y);
-        }
+            const std::pair<int, int> land = lands.top();
+            lands.pop();
 
-        if (y - 1 >= 0)
-        {
-            nodes[index - width].num = node.num;
-            ProcessNode(grid, x, y - 1);
-        }
-        
-        if (y + 1 < height)
-        {
-            nodes[index + width].num = node.num;
-            ProcessNode(grid, x, y + 1);
+            for (int i = 0; i < 4; ++i)
+            {
+                const std::pair<int, int> neighbor = std::make_pair(land.first + adjacent_x[i], land.second + adjacent_y[i]);
+
+                if (neighbor.first >= 0 && neighbor.first < width && neighbor.second >= 0 && neighbor.second < height)
+                {
+                    if (grid[neighbor.second][neighbor.first] == '1')
+                    {
+                        lands.push(neighbor);
+                    }
+                }
+            }
+
+            grid[land.second][land.first] = '0';
         }
     }
-    
-private:
+
+    const int adjacent_x[4] = { 1, 0, -1, 0 };
+    const int adjacent_y[4] = { 0, 1, 0, -1 };
+
     int width;
     int height;
-    
-    std::vector<Node> nodes;
-    
-    int islands = 0;
 };
