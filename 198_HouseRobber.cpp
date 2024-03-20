@@ -1,28 +1,40 @@
 class Solution {
 public:
     int rob(vector<int>& nums) {
-        const int size = static_cast<int>(nums.size());
-        
-        table = std::vector<int>(size+2, -1);
-        table[0] = 0;
-        table[1] = 0;
-        
-        return robRec(nums, size-1);
+        size = nums.size();
+        table = std::vector<int>(size, -1);
+
+        return rob_rec(nums, 0);
     }
-    
+
 private:
-    int robRec(std::vector<int>& nums, int index)
+    int rob_rec(const std::vector<int>& nums, int house)
     {
-        if (table[index+2] >= 0)
-            return table[index+2];
-        
-        const int robThis = robRec(nums, index-2) + nums[index];
-        const int notThis = robRec(nums, index-1);
-        
-        table[index+2] = std::max(robThis, notThis);
-        return table[index+2];
+        if (house >= size)
+        {
+            return 0;
+        }
+
+        if (table[house] > -1)
+        {
+            return table[house];
+        }
+
+        const int takeThisHouse = rob_rec(nums, house + 2) + nums[house];
+        const int skipThisHouse = rob_rec(nums, house + 1);
+
+        if (takeThisHouse > skipThisHouse)
+        {
+            table[house] = takeThisHouse;
+        }
+        else
+        {
+            table[house] = skipThisHouse;
+        }
+
+        return table[house];
     }
-    
-private:
+
     std::vector<int> table;
+    int size;
 };
