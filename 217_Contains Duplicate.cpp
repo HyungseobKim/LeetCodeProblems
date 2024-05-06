@@ -1,18 +1,18 @@
 class Solution {
 public:
     bool containsDuplicate(vector<int>& nums) {
-        std::set<int> table;
-        
-        for (const int num : nums)
+        std::unordered_set<int> table;
+
+        for (int num : nums)
         {
-            if (table.find(num) != table.end())
+            if (table.contains(num))
             {
                 return true;
             }
-            
+
             table.insert(num);
         }
-        
+
         return false;
     }
 };
