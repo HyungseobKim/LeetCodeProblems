@@ -1,8 +1,6 @@
 class Solution {
 public:
     vector<int> twoSum(vector<int>& nums, int target) {
-        std::vector<int> result(2);
-
         std::unordered_map<int, int> table;
         table[nums[0]] = 0;
 
@@ -19,13 +17,10 @@ public:
             }
             else
             {
-                result[0] = complement->second;
-                result[1] = i;
-
-                return result;
+                return std::vector<int>({i, complement->second});
             }
         }
 
-        return result;
+        return std::vector<int>();
     }
 };
