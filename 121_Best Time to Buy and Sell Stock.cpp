@@ -19,4 +19,19 @@ public:
         
         return max_profit;
     }
+	
+	int maxProfit2(vector<int>& prices) {
+        const int size = prices.size();
+        int highestPrice = prices[size - 1];
+        int bestProfit = 0;
+
+        for (int i = size - 2; i >= 0; --i)
+        {
+            const int price = prices[i];
+            highestPrice = std::max(highestPrice, price);
+            bestProfit = std::max(bestProfit, highestPrice - price);
+        }
+
+        return bestProfit;
+    }
 };
