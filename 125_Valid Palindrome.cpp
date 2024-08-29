@@ -1,83 +1,38 @@
 class Solution {
 public:
     bool isPalindrome(string s) {
-        int i = 0;
-        int j = s.length() - 1;
+        const int length = s.length();
+        char table[length];
 
-        while (i <= j)
+        int index = 0;
+
+        for (const char c : s)
         {
-            char c1 = s[i];
-            int alphanumeric = IsAlphanumeric(c1);
-
-            while (alphanumeric == -1)
+            if (c >= 'a' && c <= 'z')
             {
-                ++i;
-
-                if (i >= j)
-                {
-                    return true;
-                }
-
-                c1 = s[i];
-                alphanumeric = IsAlphanumeric(c1);
+                table[index] = c;
+                ++index;
             }
-
-            if (alphanumeric == 1)
+            else if (c >= 'A' && c <= 'Z')
             {
-                c1 -= ('A' - 'a');
+                table[index] = c - 'A' + 'a';
+                ++index;
             }
-
-            char c2 = s[j];
-            alphanumeric = IsAlphanumeric(c2);
-
-            while (alphanumeric == -1)
+            else if (c >= '0' && c <= '9')
             {
-                --j;
-
-                if (j <= i)
-                {
-                    return true;
-                }
-
-                c2 = s[j];
-                alphanumeric = IsAlphanumeric(c2);
+                table[index] = c;
+                ++index;
             }
+        }
 
-            if (alphanumeric == 1)
-            {
-                c2 -= ('A' - 'a');
-            }
-
-            if (c1 != c2)
+        for (int index1 = 0, index2 = index - 1; index1 < index2; ++index1, --index2)
+        {
+            if (table[index1] != table[index2])
             {
                 return false;
             }
-
-            ++i;
-            --j;
         }
 
         return true;
     }
-
-private:
-    int IsAlphanumeric (char c)
-    {            
-        if (c >= 'a' && c <= 'z')
-        {
-            return 2;
-        }
-
-        if (c >= '0' && c <= '9')
-        {
-            return 0;
-        }
-
-        if (c >= 'A' && c <= 'Z')
-        {
-            return 1;
-        }
-
-        return -1;
-    };
 };
