@@ -1,15 +1,13 @@
 class Solution {
 public:
     vector<vector<int>> combine(int n, int k) {
-        long long int total = 1;
+        int total = 1;
         for (int i = 0; i < k; ++i)
         {
             total *= (n-i);
+            total /= (i+1);
         }
-        for (int i = 0; i < k; ++i)
-        {
-            total /= (k-i);
-        }
+        
         answer = std::vector<std::vector<int>>(total, std::vector<int>(k));
         index = 0;
 
