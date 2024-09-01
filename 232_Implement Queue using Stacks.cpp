@@ -1,6 +1,3 @@
-/*
-	Follow-up: Can you implement the queue such that each operation is amortized O(1) time complexity? In other words, performing n operations will take overall O(n) time even if one of those operations may take longer.
-*/
 class MyQueue {
 public:
     MyQueue() {
@@ -12,41 +9,33 @@ public:
     }
     
     int pop() {
-        if (outStack.empty())
-        {
-            MoveAll(inStack, outStack);
-        }
+        CheckAndReadyOutStack();
 
-        const int top = outStack.top();
+        const int front = outStack.top();
         outStack.pop();
-
-        return top;
+        return front;
     }
     
     int peek() {
-        if (outStack.empty())
-        {
-            MoveAll(inStack, outStack);
-        }
-
+        CheckAndReadyOutStack();
         return outStack.top();
     }
     
     bool empty() {
         return inStack.empty() && outStack.empty();
     }
-
 private:
-    void MoveAll(std::stack<int>& stackToClear, std::stack<int>& stackToFill)
+    void CheckAndReadyOutStack()
     {
-        const int size = stackToClear.size();
-
-        for (int i = 0; i < size; ++i)
+        if (outStack.empty() == false)
         {
-            const int top = stackToClear.top();
-            stackToClear.pop();
+            return;
+        }
 
-            stackToFill.push(top);
+        while(inStack.empty() == false)
+        {
+            outStack.push(inStack.top());
+            inStack.pop();
         }
     }
 
