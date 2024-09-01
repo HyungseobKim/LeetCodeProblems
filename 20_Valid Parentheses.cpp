@@ -1,51 +1,49 @@
 class Solution {
 public:
     bool isValid(string s) {
-        std::stack<char> table;
+        std::stack<int> openBrackets;
 
-        for (char c : s)
+        for (const char c : s)
         {
-            if (c == '(' || c == '[' || c == '{')
+            if (c == '(' || c == '{' || c== '[')
             {
-                table.push(c);
+                openBrackets.push(c);
             }
             else
             {
-                if (table.empty())
+                if (openBrackets.empty())
                 {
                     return false;
                 }
 
-                const char top = table.top();
-                
-                switch (c)
+                switch(openBrackets.top())
                 {
-                    case ')':
-                    if (top != '(')
+                case '(':
+                    if (c != ')')
                     {
                         return false;
                     }
                     break;
 
-                    case ']':
-                    if (top != '[')
+                case '{':
+                    if (c != '}')
                     {
                         return false;
                     }
                     break;
 
-                    case '}':
-                    if (top != '{')
+                case ']':
+                    if (c != ']')
                     {
                         return false;
                     }
-                    break;                
+                    break;
                 }
 
-                table.pop();
+                openBrackets.pop();
             }
         }
 
-        return table.empty();
+        return openBrackets.empty();
     }
 };
