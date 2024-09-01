@@ -1,5 +1,41 @@
 /*
+	Using the patience sort algorithm.
+*/
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        std::vector<std::vector<int>> table;
+        table.push_back(std::vector<int>(1, nums[0]));
+
+        const int size = nums.size();
+
+        for (int i = 1; i < size; ++i)
+        {
+            const int num = nums[i];
+            bool added = false;
+
+            for (std::vector<int>& pile : table)
+            {
+                if (pile[pile.size() - 1] >= num)
+                {
+                    pile.push_back(num);
+                    added = true;
+                    break;
+                }
+            }
+
+            if (added == false)
+            {
+                table.push_back(std::vector<int>(1, num));
+            }
+        }
+
+        return table.size();
+    }
+};
+/*
 	The best solution by a guy from leetcode solutions.
+	*It is an optimaized version of the patience sort algorithm.
 */
 class Solution {
 public:
