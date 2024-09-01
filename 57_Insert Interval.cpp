@@ -185,3 +185,50 @@ private:
         }
     }
 };
+
+class Solution {
+public:
+    vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+        const int size = intervals.size();
+        int pos = -1;
+
+        for (int i = 0; i < size; ++i)
+        {
+            if (newInterval[0] <= intervals[i][1])
+            {
+                pos = i;
+                break;
+            }
+        }
+
+        if (pos == -1)
+        {
+            intervals.push_back(newInterval);
+            return intervals;
+        }
+
+        if (newInterval[1] < intervals[pos][0])
+        {
+            intervals.insert(intervals.begin() + pos, newInterval);
+            return intervals;
+        }
+
+        intervals[pos][0] = std::min(intervals[pos][0], newInterval[0]);
+        intervals.push_back(std::vector<int>(2, std::numeric_limits<int>::max()));
+
+        for (int i = pos; i < size; ++i)
+        {
+            const std::vector<int> interval = intervals[i + 1];
+
+            if (newInterval[1] < interval[0])
+            {
+                intervals[pos][1] = std::max(intervals[i][1], newInterval[1]);
+                intervals.erase(intervals.begin() + pos + 1, intervals.begin() + i + 1);
+                break;
+            }
+        }
+
+        intervals.pop_back();
+        return intervals;
+    }
+};
