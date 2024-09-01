@@ -23,3 +23,32 @@ public:
         return intervals;
     }
 };
+
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        std::sort(intervals.begin(), intervals.end(), [](const auto& a, const auto& b){ return a[0] < b[0]; });
+
+        std::vector<std::vector<int>> result;
+        std::vector<int>& standard = intervals[0];
+
+        const int size = intervals.size();
+        for (int i = 1; i < size; ++i)
+        {
+            const std::vector<int>& interval = intervals[i];
+
+            if (interval[0] <= standard[1])
+            {
+                standard[1] = std::max(standard[1], interval[1]);
+            }
+            else
+            {
+                result.push_back(standard);
+                standard = interval;
+            }
+        }
+
+        result.push_back(standard);
+        return result;
+    }
+};
