@@ -39,6 +39,6 @@ public:
     }
 
 private:
-    int adjacent_sr[4] = { 0, 1, 0, -1 };
-    int adjacent_sc[4] = { 1, 0, -1, 0 };
+    const int adjacent_sr[4] = { 0, 1, 0, -1 };
+    const int adjacent_sc[4] = { 1, 0, -1, 0 };
 };
