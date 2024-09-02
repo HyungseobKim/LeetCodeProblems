@@ -11,54 +11,49 @@
 class Solution {
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        const int size = lists.size();
-        if (size == 0)
-        {
-            return nullptr;
-        }
+        auto Compare = [](ListNode* node1, ListNode* node2){ return node1->val > node2->val; };
+        std::priority_queue<ListNode*, std::vector<ListNode*>, decltype(Compare)> q(Compare);
 
-        auto compare = [&](int a, int b){ return lists[a]->val > lists[b]->val; };
-        std::priority_queue<int, std::vector<int>, decltype(compare)> q(compare);
-
-        for (int i = 0; i < size; ++i)
+        // Push all valid head nodes to the priority queue.
+        for (ListNode* head : lists)
         {
-            if (lists[i])
+            if (head)
             {
-                q.push(i);
+                q.push(head);
             }
         }
 
+        // If the q is empty, there was no valid node.
         if (q.empty())
         {
             return nullptr;
         }
 
-        const int headIndex = q.top();
+        // Store the head node to return.
+        ListNode* head = q.top();
         q.pop();
-
-        ListNode* head = lists[headIndex];
-        lists[headIndex] = head->next;
-        
-        if (lists[headIndex])
+        if (head->next)
         {
-            q.push(headIndex);
+            q.push(head->next);
         }
 
-        ListNode* next = head;
+        // Get the tail node to attach the sorted nodes.
+        ListNode* tail = head;
 
         while (q.size())
         {
-            const int top = q.top();
+            // Get the smallest node.
+            ListNode* node = q.top();
             q.pop();
 
-            next->next = lists[top];
+            // Attach to the tail node and make it be the new tail.
+            tail->next = node;
+            tail = node;
 
-            next = next->next;
-            lists[top] = lists[top]->next;
-
-            if (lists[top])
+            // Push the linked node to the priority queue.
+            if (node->next)
             {
-                q.push(top);
+                q.push(node->next);
             }
         }
 
