@@ -182,3 +182,102 @@ private:
         return nullptr;
     }
 };
+
+
+/*
+	The soultion for general binary trees. (not binary search tree).
+*/
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (root == nullptr)
+        {
+            return root;
+        }
+
+        if (root == p)
+        {
+            found_p = true;
+            if (found_q)
+            {
+                return root;
+            }
+
+            lowestCommonAncestor(root->left, p, q);
+            if (found_q)
+            {
+                ancestor = root;
+                return root;
+            }
+
+            lowestCommonAncestor(root->right, p, q);
+            if (found_q)
+            {
+                ancestor = root;
+                return root;
+            }
+
+            return root;
+        }
+
+        if (root == q)
+        {
+            found_q = true;
+            if (found_p)
+            {
+                return root;
+            }
+
+            lowestCommonAncestor(root->left, p, q);
+            if (found_p)
+            {
+                ancestor = root;
+                return root;
+            }
+
+            lowestCommonAncestor(root->right, p, q);
+            if (found_p)
+            {
+                ancestor = root;
+                return root;
+            }
+
+            return root;
+        }
+
+        const bool previously_found_one = found_p || found_q;
+
+        lowestCommonAncestor(root->left, p, q);
+        if (ancestor)
+        {
+            return ancestor;
+        }
+
+        lowestCommonAncestor(root->right, p, q);
+        if (ancestor)
+        {
+            return ancestor;
+        }
+
+        if (previously_found_one == false && (found_p && found_q))
+        {
+            ancestor = root;
+        }
+
+        return root;
+    }
+private:
+    bool found_p = false;
+    bool found_q = false;
+    TreeNode* ancestor = nullptr;
+};
