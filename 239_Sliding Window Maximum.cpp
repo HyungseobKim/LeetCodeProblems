@@ -41,3 +41,36 @@ public:
         return answer;
     }
 };
+
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        const int size = nums.size();
+        std::vector<int> output(size - k + 1);
+
+        auto cmp = [&](int left, int right){ return nums[left] < nums[right]; };
+        std::priority_queue<int, std::vector<int>, decltype(cmp)> pq(cmp);
+
+        // Push all numbers of the first window.
+        for (int i = 0; i < k - 1; ++i)
+        {
+            pq.push(i);
+        }
+        
+        for (int i = k - 1; i < size; ++i)
+        {
+            pq.push(i);
+
+            int index_max = pq.top();
+            while (index_max <= i - k)
+            {
+                pq.pop();
+                index_max = pq.top();
+            }
+
+            output[i - k + 1] = nums[index_max];
+        }
+
+        return output;
+    }
+};
