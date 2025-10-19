@@ -1,53 +1,26 @@
 class Solution {
 public:
     int coinChange(vector<int>& coins, int amount) {
-        table = std::vector<int>(amount + 1, -2);
+        std::vector<int> table = std::vector<int>(amount + 1, amount + 1);
         table[0] = 0;
 
-        std::sort(coins.begin(), coins.end(), [](int a, int b){ return a < b; });
-        return coinChange_rec(coins, amount);
-    }
-
-private:
-    int coinChange_rec(const std::vector<int>& coins, int amount)
-    {
-        if (table[amount] > -2)
+        for (int value = 1; value <= amount; ++value)
         {
-            return table[amount];
-        }
-
-        // It can't be greater than the amount because coins are always greater than 0.
-        int fewest = amount + 1;
-
-        for (int coin : coins)
-        {
-            const int remain = amount - coin;
-            
-            if (remain < 0)
+            for (const int coin : coins)
             {
-                // We can break because coins are sorted.
-                break;
+                const int remain = value - coin;
+                if (remain >= 0)
+                {
+                    table[value] = std::min(table[value], table[remain] + 1);
+                }
             }
-
-            const int result = coinChange_rec(coins, remain);
-
-            if (result == -1)
-            {
-                continue;
-            }
-
-            fewest = std::min(fewest, result + 1);
         }
 
-        if (fewest == amount + 1)
+        if (table[amount] == amount + 1)
         {
-            // There was no possible way with this amount.
-            fewest = -1;
+            return -1;
         }
 
-        table[amount] = fewest;
-        return fewest;
+        return table[amount];
     }
-
-    std::vector<int> table;
 };
